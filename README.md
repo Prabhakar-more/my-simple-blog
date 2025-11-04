@@ -27,9 +27,9 @@ Notes
 # my-simple-blog website
 
 ## Quick walkthrough
-<br>
+
 ![Full blog view](full%20blog%20view.png)
-<br><br>
+
 ![Post view](post%20view.png)
 
 
