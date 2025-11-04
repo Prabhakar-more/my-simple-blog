@@ -23,11 +23,13 @@ Notes
 - Uploaded files are stored in `public/uploads` and served statically.
 - If `multer` is not installed the server will start but `/upload` will return 500 until you install `multer`.
 
-
+<br><br><br>
 # my-simple-blog website
 
 ## Quick walkthrough
+<br>
 ![Full blog view](full%20blog%20view.png)
+<br><br>
 ![Post view](post%20view.png)
 
 
