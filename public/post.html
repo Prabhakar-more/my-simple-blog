@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Post</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="/blog.html" style="text-decoration:none;color:var(--muted);">← Back to posts</a>
+    </header>
+
+    <main class="post-view">
+      <div id="postContainer"></div>
+    </main>
+
+    <footer class="small muted" style="margin-top:18px; text-align:center;">Built with ❤️ — Simple Blog</footer>
+  </div>
+
+  <script>
+  async function loadPost() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (!id) return document.getElementById('postContainer').innerText = 'No post id provided';
+    try {
+      const resp = await fetch(`/posts/${id}`);
+      if (!resp.ok) return document.getElementById('postContainer').innerText = 'Post not found';
+      const post = await resp.json();
+      document.getElementById('postContainer').innerHTML = `
+        <article>
+          <h1>${escapeHTML(post.title)}</h1>
+          <div class="meta">By <strong>${escapeHTML(post.author)}</strong> • ${new Date(post.createdAt).toLocaleString()}</div>
+          <div class="content">${escapeHTML(post.content).replace(/\n/g,'<br>')}</div>
+          <div class="media" style="margin-top:14px; display:flex; gap:12px; flex-wrap:wrap;">
+            ${(post.media || []).map(m => {
+              if (m.mime && m.mime.startsWith('image/')) return `<img src="${m.url}" style="max-width:280px;border-radius:10px;">`;
+              if (m.mime && m.mime.startsWith('video/')) return `<video src="${m.url}" controls style="max-width:420px;border-radius:10px;"></video>`;
+              return `<a href="${m.url}">${m.original || m.url}</a>`;
+            }).join('')}
+          </div>
+        </article>
+      `;
+    } catch (err) {
+      document.getElementById('postContainer').innerText = 'Error loading post';
+    }
+  }
+
+  function escapeHTML(str) {
+    return String(str).replace(/[&<>"']/g, (s) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[s]);
+  }
+
+  loadPost();
+  </script>
+</body>
+</html>
